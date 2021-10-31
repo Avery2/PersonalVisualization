@@ -1,0 +1,57 @@
+---
+title: "DataExploration"
+author: "Avery Chan"
+date: "10/30/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+theme_set(theme_bw())
+```
+
+```{r}
+data_Q_activity <- read_csv("1week/Qbserve_byactivity_2021-10-15_2021-10-23.csv", col_types = cols())
+data_Q_hour <- read_csv("1week/Qbserve_byhour_2021-10-15_2021-10-23.csv", col_types = cols())
+data_T_time <- read_csv("1week/Toggl_time_entries_2021-10-15_to_2021-10-22.csv", col_types = cols())
+data_T_summary <- read_csv("1week/Toggl_Track_summary_report_2021-10-15_2021-10-22.csv", col_types = cols())
+
+data_C_Avery <- read_csv("calendar/Avery.csv", col_types = cols())
+data_C_Classes <- read_csv("calendar/Classes.csv", col_types = cols())
+data_C_System <- read_csv("calendar/System.csv", col_types = cols())
+data_C_TimeBlocks <- read_csv("calendar/Time_Blocks.csv", col_types = cols())
+```
+
+```{r}
+data_Q_activity %>% view()
+data_Q_hour %>% view()
+data_T_time %>% view()
+data_T_summary %>% view()
+
+data_C_Avery %>% view()
+data_C_Classes %>% view()
+data_C_System %>% view()
+data_C_TimeBlocks %>% view()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
