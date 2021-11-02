@@ -15,6 +15,41 @@ library(tidyverse)
 library(lubridate)
 library(hms)
 theme_set(theme_bw())
+library(r2d3)
+bars <- c(10, 20, 30)
+library(shiny)
+```
+
+```{d3 eval=FALSE, message=FALSE, warning=FALSE, data=bars, include=FALSE, list(color=, options=list(color = 'orange')}
+svg.selectAll('rect')
+  .data(data)
+  .enter()
+    .append('rect')
+      .attr('width', function(d) { return d * 10; })
+      .attr('height', '20px')
+      .attr('y', function(d, i) { return i * 22; })
+      .attr('fill', options.color);
+```
+
+```{r}
+# ui <- fluidPage(
+#   inputPanel(
+#     sliderInput("bar_max", label = "Max:",
+#                 min = 0.1, max = 1.0, value = 0.2, step = 0.1)
+#   ),
+#   d3Output("d3")
+# )
+# 
+# server <- function(input, output) {
+#   output$d3 <- renderD3({
+#     r2d3(
+#       runif(5, 0, input$bar_max),
+#       script = system.file("examples/baranims.js", package = "r2d3")
+#     )
+#   })
+# }
+# 
+# shinyApp(ui = ui, server = server)
 ```
 
 ## Read data
@@ -60,11 +95,27 @@ data_T_time <- data_T_time %>%
   mutate(Minutes = seconds(Duration) %>% as.numeric() / 60)
 data_T_summary <- data_T_summary %>%
   mutate(Minutes = seconds(Duration) %>% as.numeric() / 60)
+```
 
-data_Q_activity
-data_Q_hour
-data_T_time
-# data_T_summary
+```{r}
+data_Q_activity$Category %>% unique()
+```
+
+```{r}
+## Add labels
+
+productive <- c("Development", "Documents & Writing", "Reference & Learning", "Email", "Management", "Audio/Video Production")
+
+neutral <- c("Uncategorized", "File Management", "Search", "Utilities & Services", "Messaging")
+
+data_Q_activity <- data_Q_activity %>% 
+  mutate(
+    Type = case_when(
+      Category %in% productive ~ "Productive",
+      Category %in% neutral ~ "Neutral",
+      TRUE ~ "Distracting"
+    )
+  )
 ```
 
 ## Initial look at Qbserve data
@@ -73,14 +124,16 @@ data_T_time
 categories <- data_Q_activity %>%
   group_by(Category) %>%
   summarise(n = n(),
-            Min = sum(Minutes)) %>%
+            Min = sum(Minutes), Type) %>%
   arrange(-Min)
 # categories
 
 app_usage <- data_Q_activity %>%
   group_by(App) %>%
   summarise(n = n(),
-            Min = sum(Minutes)) %>%
+            Min = sum(Minutes),
+            Type
+            ) %>%
   filter(Min > 5) %>%
   arrange(-Min)
 # app_usage
@@ -95,7 +148,21 @@ categories %>% ggplot(aes(
     angle = 90,
     vjust = 0.5,
     hjust = 1
-  ))
+  )) + 
+  ggtitle("Categories")
+
+categories %>% ggplot(aes(
+  x = reorder(Category,-Min),
+  y = Min,
+  fill = Type
+)) +
+  geom_col() +
+  theme(axis.text.x = element_text(
+    angle = 90,
+    vjust = 0.5,
+    hjust = 1
+  )) + 
+  ggtitle("Categories")
 
 app_usage %>% ggplot(aes(
   x = reorder(App, -Min),
@@ -107,8 +174,21 @@ app_usage %>% ggplot(aes(
     angle = 90,
     vjust = 0.5,
     hjust = 1
-  ))
+  )) + ggtitle("App Usage")
+
+app_usage %>% ggplot(aes(
+  x = reorder(App, -Min),
+  y = Min,
+  fill = Type
+)) +
+  geom_col() +
+  theme(axis.text.x = element_text(
+    angle = 90,
+    vjust = 0.5,
+    hjust = 1
+  )) + ggtitle("App Usage")
 ```
+
 
 ## Initial look at Toggl data
 
@@ -137,7 +217,7 @@ First data just around categories.
 ```{r}
 data_T_time_summary %>% 
   ggplot(aes(x = reorder(Project, Minutes), y = Minutes, fill=Description)) +
-  geom_col()
+  geom_col() + ggtitle("Time Summary")
 ```
 
 Then data more temporally. (Calendar might go here)
@@ -160,7 +240,20 @@ I also noticed that I will start the timer to match when I start working. I don'
 I think more interesting would be a holistic overview that overlays what I did with my records. This would be calendar data and journaling information although I didn't really do that over this week.
 
 
+- Overlap (with 5-10m grace) between the two
 
+Honestly, I think I'll do this next part like an art project
+I really liked the musical note one
+What do I need to encode?
+
+- Matching reports
+- Mismatch between reports
+
+- Hours
+- Category
+  - Subcategory
+  
+- Sequential time -- calendar and start/end (day of week, part of day)
 
 
 
