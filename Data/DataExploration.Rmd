@@ -8,8 +8,12 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(lubridate)
+library(hms)
 theme_set(theme_bw())
 ```
+
+## Read data
 
 ```{r}
 data_Q_activity <- read_csv("1week/Qbserve_byactivity_2021-10-15_2021-10-23.csv", col_types = cols())
@@ -17,24 +21,134 @@ data_Q_hour <- read_csv("1week/Qbserve_byhour_2021-10-15_2021-10-23.csv", col_ty
 data_T_time <- read_csv("1week/Toggl_time_entries_2021-10-15_to_2021-10-22.csv", col_types = cols())
 data_T_summary <- read_csv("1week/Toggl_Track_summary_report_2021-10-15_2021-10-22.csv", col_types = cols())
 
+# calendar data
 data_C_Avery <- read_csv("calendar/Avery.csv", col_types = cols())
 data_C_Classes <- read_csv("calendar/Classes.csv", col_types = cols())
 data_C_System <- read_csv("calendar/System.csv", col_types = cols())
 data_C_TimeBlocks <- read_csv("calendar/Time_Blocks.csv", col_types = cols())
 ```
 
-```{r}
-data_Q_activity %>% view()
-data_Q_hour %>% view()
-data_T_time %>% view()
-data_T_summary %>% view()
+## Clean data
 
-data_C_Avery %>% view()
-data_C_Classes %>% view()
-data_C_System %>% view()
-data_C_TimeBlocks %>% view()
+```{r}
+data_Q_activity
+data_Q_hour
+
+data_T_time
+data_T_summary
+
+# calendars -- not interesting on their own: I do want a sum of the time each event takes
+# in particular, I'm interested in the time it takes to eat and how much dead space is around that.
+
+# data_C_Avery %>% view()
+# data_C_Classes %>% view()
+# data_C_System %>% view()
+# data_C_TimeBlocks %>% view()
+
+# data_T_time$Duration %>% sum()
+# data_T_summary$Duration %>% sum()
+
+# data_T_time$Tags %>% unique()
+# data_T_time$Task %>% unique()
+
+# convert to time units
+data_Q_hour <- data_Q_hour %>% 
+  mutate(
+    Hour = parse_date_time(Hour, '%I %p') %>% 
+      # hour() %>% 
+      hms::as_hms()
+  )
+
+data_T_time <- data_T_time %>% 
+  select(Project, Description, `Start date`, `End date`, `Start time`, `End time`, Duration)
+data_T_summary <- data_T_summary %>% 
+  select(Project, Description, Duration)
 ```
 
+## Initial look at Qbserve data
+
+```{r}
+categories <- data_Q_activity %>%
+  group_by(Category) %>%
+  summarise(n = n(),
+            Min = sum(Minutes)) %>%
+  arrange(-Min)
+# categories
+
+app_usage <- data_Q_activity %>%
+  group_by(App) %>%
+  summarise(n = n(),
+            Min = sum(Minutes)) %>%
+  filter(Min > 5) %>%
+  arrange(-Min)
+# app_usage
+
+categories %>% ggplot(aes(
+  x = reorder(Category, -Min),
+  y = Min,
+  fill = n
+)) +
+  geom_col() +
+  theme(axis.text.x = element_text(
+    angle = 90,
+    vjust = 0.5,
+    hjust = 1
+  ))
+
+app_usage %>% ggplot(aes(
+  x = reorder(App,-Min),
+  y = Min,
+  fill = n
+)) +
+  geom_col() +
+  theme(axis.text.x = element_text(
+    angle = 90,
+    vjust = 0.5,
+    hjust = 1
+  ))
+```
+
+## Initial look at Toggl data
+
+We learn that we can ignore `data_T_summary` since it encodes the same information as `data_T_time`.
+
+```{r}
+## Left over to parse
+
+data_Q_hour
+data_T_time
+# data_T_summary
+
+## Get the same information here
+data_T_time_summary <- data_T_time %>% 
+  group_by(Project, Description) %>% 
+  summarise(
+    Duration = sum(Duration) %>% hms::as_hms(),
+    # Duration2 = sum(Duration)
+  )
+
+# data_T_summary
+# They are the same...
+data_T_time$Duration %>% sum() == data_T_summary$Duration %>% sum()
+```
+First data just around categories.
+
+```{r}
+data_T_time_summary %>% 
+  ggplot(aes(x = reorder(Project, Duration), y = Duration)) +
+  geom_col()
+
+data_T_time_summary %>% 
+  ggplot(aes(x = reorder(Project, Duration), y = Duration)) +
+  geom_col()
+```
+
+Then data more temporally. (Calendar might go here)
+
+```{r}
+data_Q_hour
+data_T_time
+```
 
 
 
