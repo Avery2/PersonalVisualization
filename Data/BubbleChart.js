@@ -1,3 +1,5 @@
+// import * as d3 from "d3";
+
 // Copyright 2021 Observable, Inc.
 // Released under the ISC license.
 // https://observablehq.com/@d3/bubble-chart
@@ -33,6 +35,7 @@ function BubbleChart(
   const V = d3.map(data, value);
   const G = group == null ? null : d3.map(data, group);
   const I = d3.range(V.length).filter((i) => V[i] > 0);
+  console.log("hello world");
 
   // Unique the groups.
   if (G && groups === undefined) groups = I.map((i) => G[i]);
@@ -113,22 +116,22 @@ function BubbleChart(
   return Object.assign(svg.node(), { scales: { color } });
 }
 
-chart = BubbleChart(data, {
-  label: (d) =>
-    [
-      ...d.id
-        .split(".")
-        .pop()
-        .split(/(?=[A-Z][a-z])/g),
-      d.value.toLocaleString("en"),
-    ].join("\n"),
-  value: (d) => d.value,
-  group: (d) => d.id.split(".")[1],
-  title: (d) => `${d.id}\n${d.value.toLocaleString("en")}`,
-  link: (d) =>
-    `https://github.com/prefuse/Flare/blob/master/flare/src/${d.id.replace(
-      /\./g,
-      "/"
-    )}.as`,
-  width: 1152,
-});
+// chart = BubbleChart(data, {
+//   label: (d) =>
+//     [
+//       ...d.id
+//         .split(".")
+//         .pop()
+//         .split(/(?=[A-Z][a-z])/g),
+//       d.value.toLocaleString("en"),
+//     ].join("\n"),
+//   value: (d) => d.value,
+//   group: (d) => d.id.split(".")[1],
+//   title: (d) => `${d.id}\n${d.value.toLocaleString("en")}`,
+//   link: (d) =>
+//     `https://github.com/prefuse/Flare/blob/master/flare/src/${d.id.replace(
+//       /\./g,
+//       "/"
+//     )}.as`,
+//   width: 1152,
+// });

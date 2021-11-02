@@ -37,7 +37,7 @@ function BubbleChart(
 
   // Unique the groups.
   if (G && groups === undefined) groups = I.map((i) => G[i]);
-  groups = G && new d3.InternSet(groups);
+  groups = G && new Set(groups);
 
   // Construct scales.
   const color = G && d3.scaleOrdinal(groups, colors);

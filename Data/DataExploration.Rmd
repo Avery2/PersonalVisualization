@@ -232,16 +232,45 @@ What do I need to encode?
 
 ## D3
 
+```{r}
+toggle_year_data <- read_csv("Toggl_time_entries_2020-01-01_to_2020-12-31.csv") %>%
+  select(Project,
+         Description,
+         `Start date`,
+         `End date`,
+         `Start time`,
+         `End time`,
+         Duration)
+toggle_year_data <- toggle_year_data %>%
+  # mutate(Minutes = seconds(Duration) %>% as.numeric() / 60)
+  mutate(Minutes = (seconds(Duration) %>% as.numeric() / 60) %>% round(7))
+```
+
+```{r}
+# toggle_year_data$Project %>% unique()
+bubble_data <- toggle_year_data %>% 
+  group_by(Project) %>% 
+  summarise(Time = sum(Minutes))
+
+bubble_data <- toggle_year_data %>% 
+  group_by(Description, Project) %>% 
+  summarise(Time = sum(Minutes))
+
+write_csv(bubble_data, "bubble_toggl_year.csv")
+```
+
+
+
 ### Bubble Chart
 
 ```{r}
-flare <- read_csv("flare.csv") %>% filter(!(value %>% is.na()))
-flare
+# flare <- read_csv("flare.csv") %>% filter(!(value %>% is.na()))
+# flare
 ```
 
 ```{r}
 # r2d3(data=c(0.3, 0.6, 0.8, 0.95, 0.40, 0.20), script = "barchart.js")
-r2d3(data=flare, script = "BubbleChart.js")
+# r2d3(data=flare, script = "BubbleChart.js")
 ```
 
 
