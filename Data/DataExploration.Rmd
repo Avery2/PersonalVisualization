@@ -31,27 +31,6 @@ svg.selectAll('rect')
       .attr('fill', options.color);
 ```
 
-```{r}
-# ui <- fluidPage(
-#   inputPanel(
-#     sliderInput("bar_max", label = "Max:",
-#                 min = 0.1, max = 1.0, value = 0.2, step = 0.1)
-#   ),
-#   d3Output("d3")
-# )
-# 
-# server <- function(input, output) {
-#   output$d3 <- renderD3({
-#     r2d3(
-#       runif(5, 0, input$bar_max),
-#       script = system.file("examples/baranims.js", package = "r2d3")
-#     )
-#   })
-# }
-# 
-# shinyApp(ui = ui, server = server)
-```
-
 ## Read data
 
 ```{r}
@@ -95,10 +74,7 @@ data_T_time <- data_T_time %>%
   mutate(Minutes = seconds(Duration) %>% as.numeric() / 60)
 data_T_summary <- data_T_summary %>%
   mutate(Minutes = seconds(Duration) %>% as.numeric() / 60)
-```
-
-```{r}
-data_Q_activity$Category %>% unique()
+# data_Q_activity$Category %>% unique()
 ```
 
 ```{r}
@@ -132,14 +108,13 @@ app_usage <- data_Q_activity %>%
   group_by(App) %>%
   summarise(n = n(),
             Min = sum(Minutes),
-            Type
-            ) %>%
+            Type) %>%
   filter(Min > 5) %>%
   arrange(-Min)
 # app_usage
 
 categories %>% ggplot(aes(
-  x = reorder(Category,-Min),
+  x = reorder(Category, -Min),
   y = Min,
   fill = n
 )) +
@@ -148,11 +123,11 @@ categories %>% ggplot(aes(
     angle = 90,
     vjust = 0.5,
     hjust = 1
-  )) + 
+  )) +
   ggtitle("Categories")
 
 categories %>% ggplot(aes(
-  x = reorder(Category,-Min),
+  x = reorder(Category, -Min),
   y = Min,
   fill = Type
 )) +
@@ -161,11 +136,11 @@ categories %>% ggplot(aes(
     angle = 90,
     vjust = 0.5,
     hjust = 1
-  )) + 
+  )) +
   ggtitle("Categories")
 
 app_usage %>% ggplot(aes(
-  x = reorder(App, -Min),
+  x = reorder(App,-Min),
   y = Min,
   fill = n
 )) +
@@ -177,7 +152,7 @@ app_usage %>% ggplot(aes(
   )) + ggtitle("App Usage")
 
 app_usage %>% ggplot(aes(
-  x = reorder(App, -Min),
+  x = reorder(App,-Min),
   y = Min,
   fill = Type
 )) +
@@ -255,6 +230,22 @@ What do I need to encode?
   
 - Sequential time -- calendar and start/end (day of week, part of day)
 
+## D3
+
+### Bubble Chart
+
+```{r}
+flare <- read_csv("flare.csv") %>% filter(!(value %>% is.na()))
+flare
+```
+
+```{r}
+# r2d3(data=c(0.3, 0.6, 0.8, 0.95, 0.40, 0.20), script = "barchart.js")
+r2d3(data=flare, script = "BubbleChart.js")
+```
+
+
+## End
 
 
 
