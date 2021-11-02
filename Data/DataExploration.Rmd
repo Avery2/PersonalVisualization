@@ -2,7 +2,11 @@
 title: "DataExploration"
 author: "Avery Chan"
 date: "10/30/2021"
-output: html_document
+output:
+  html_document:
+    toc: yes
+    df_print: paged
+    code_folding: hide
 ---
 
 ```{r setup, include=FALSE}
@@ -31,38 +35,36 @@ data_C_TimeBlocks <- read_csv("calendar/Time_Blocks.csv", col_types = cols())
 ## Clean data
 
 ```{r}
+# convert to time units
+data_Q_hour <- data_Q_hour %>%
+  mutate(Hour = parse_date_time(Hour, '%I %p') %>%
+           # hour() %>%
+           hms::as_hms())
+
+data_T_time <- data_T_time %>%
+  select(Project,
+         Description,
+         `Start date`,
+         `End date`,
+         `Start time`,
+         `End time`,
+         Duration)
+data_T_summary <- data_T_summary %>%
+  select(Project, Description, Duration)
+
+# move long column so printing is better
+data_Q_activity <-
+  data_Q_activity %>% relocate(Name, .after = Category)
+
+data_T_time <- data_T_time %>%
+  mutate(Minutes = seconds(Duration) %>% as.numeric() / 60)
+data_T_summary <- data_T_summary %>%
+  mutate(Minutes = seconds(Duration) %>% as.numeric() / 60)
+
 data_Q_activity
 data_Q_hour
-
 data_T_time
-data_T_summary
-
-# calendars -- not interesting on their own: I do want a sum of the time each event takes
-# in particular, I'm interested in the time it takes to eat and how much dead space is around that.
-
-# data_C_Avery %>% view()
-# data_C_Classes %>% view()
-# data_C_System %>% view()
-# data_C_TimeBlocks %>% view()
-
-# data_T_time$Duration %>% sum()
-# data_T_summary$Duration %>% sum()
-
-# data_T_time$Tags %>% unique()
-# data_T_time$Task %>% unique()
-
-# convert to time units
-data_Q_hour <- data_Q_hour %>% 
-  mutate(
-    Hour = parse_date_time(Hour, '%I %p') %>% 
-      # hour() %>% 
-      hms::as_hms()
-  )
-
-data_T_time <- data_T_time %>% 
-  select(Project, Description, `Start date`, `End date`, `Start time`, `End time`, Duration)
-data_T_summary <- data_T_summary %>% 
-  select(Project, Description, Duration)
+# data_T_summary
 ```
 
 ## Initial look at Qbserve data
@@ -84,7 +86,7 @@ app_usage <- data_Q_activity %>%
 # app_usage
 
 categories %>% ggplot(aes(
-  x = reorder(Category, -Min),
+  x = reorder(Category,-Min),
   y = Min,
   fill = n
 )) +
@@ -96,7 +98,7 @@ categories %>% ggplot(aes(
   ))
 
 app_usage %>% ggplot(aes(
-  x = reorder(App,-Min),
+  x = reorder(App, -Min),
   y = Min,
   fill = n
 )) +
@@ -114,9 +116,8 @@ We learn that we can ignore `data_T_summary` since it encodes the same informati
 
 ```{r}
 ## Left over to parse
-
-data_Q_hour
-data_T_time
+# data_Q_hour
+# data_T_time
 # data_T_summary
 
 ## Get the same information here
@@ -124,7 +125,7 @@ data_T_time_summary <- data_T_time %>%
   group_by(Project, Description) %>% 
   summarise(
     Duration = sum(Duration) %>% hms::as_hms(),
-    # Duration2 = sum(Duration)
+    Minutes = sum(Minutes)
   )
 
 # data_T_summary
@@ -135,11 +136,7 @@ First data just around categories.
 
 ```{r}
 data_T_time_summary %>% 
-  ggplot(aes(x = reorder(Project, Duration), y = Duration)) +
-  geom_col()
-
-data_T_time_summary %>% 
-  ggplot(aes(x = reorder(Project, Duration), y = Duration)) +
+  ggplot(aes(x = reorder(Project, Minutes), y = Minutes, fill=Description)) +
   geom_col()
 ```
 
@@ -149,6 +146,22 @@ Then data more temporally. (Calendar might go here)
 data_Q_hour
 data_T_time
 ```
+
+## Requirements
+
+- Static visualization
+- A legend that explains the encodings used
+- 2-3 paragraphs explain your visualization and the insights that you gain about yourself by creating the visualization
+
+I hoped to learn where my time went. Honestly, I already had the data collection heavily habituatilzed so that's why I chose it. Additionally, I partially kept up this record keeping because starting a timer incetivises me to work. In some way, it tells me that work has started.
+
+I also noticed that I will start the timer to match when I start working. I don't know what this means, probably just that it's a habit. Honestly that's just motivated by the aspiration for more complete data.
+
+I think more interesting would be a holistic overview that overlays what I did with my records. This would be calendar data and journaling information although I didn't really do that over this week.
+
+
+
+
 
 
 
