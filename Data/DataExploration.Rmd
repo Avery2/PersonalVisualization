@@ -246,6 +246,10 @@ toggle_year_data <- toggle_year_data %>%
   mutate(Minutes = (seconds(Duration) %>% as.numeric() / 60) %>% round(7))
 ```
 
+
+
+### Bubble Chart
+
 ```{r}
 # toggle_year_data$Project %>% unique()
 bubble_data <- toggle_year_data %>% 
@@ -257,21 +261,44 @@ bubble_data <- toggle_year_data %>%
   summarise(Time = sum(Minutes))
 
 write_csv(bubble_data, "bubble_toggl_year.csv")
+
+bubble_data_week <- data_T_time %>% 
+  group_by(Description, Project) %>% 
+  summarise(Time = sum(Minutes))
+
+write_csv(bubble_data_week, "bubble_toggl_week.csv")
 ```
 
-
-
-### Bubble Chart
+## Treemap
 
 ```{r}
-# flare <- read_csv("flare.csv") %>% filter(!(value %>% is.na()))
-# flare
+toggle_year_data %>% mutate(
+  name = paste(Project, Description, sep="/"),
+)
+
+tree_year <- toggle_year_data %>% group_by(Project, Description) %>% 
+  summarise(
+    size = sum(Minutes) %>% round(6)
+  ) %>% mutate(
+    name = paste(Project, Description, sep="/")
+  ) %>% select(
+    name, size
+  )
+
+write_csv(tree_year, "tree_toggl_year.csv")
+
+tree_week <- data_T_time %>% group_by(Project, Description) %>% 
+  summarise(
+    size = sum(Minutes) %>% round(6)
+  ) %>% mutate(
+    name = paste(Project, Description, sep="/")
+  ) %>% select(
+    name, size
+  )
+
+write_csv(tree_week, "tree_toggl_week.csv")
 ```
 
-```{r}
-# r2d3(data=c(0.3, 0.6, 0.8, 0.95, 0.40, 0.20), script = "barchart.js")
-# r2d3(data=flare, script = "BubbleChart.js")
-```
 
 
 ## End
