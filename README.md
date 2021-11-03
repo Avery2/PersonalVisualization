@@ -4,6 +4,14 @@ The data visualized here is my time spent doing various things (mostly work) tha
 
 For best viewing experience visit here: https://www.averychan.site/PersonalVisualization/.
 
+## Quick description
+
+The bubble chart kind of looks cool but it honestly doesn't tell me much.
+
+The radix chart is the most interesting because it shows cyclical data such as extended periods of low or high work. It also shows patterns in the types of work done. Note that there were some 30 hour days when I started a timer close to midnight.
+
+While the radix chart was the most interesting, I found the tree map to be most useful. It doesn't give great insight but it shows the relative proportions of each category well as well as giving me an idea of how much work one specific task took out of a year of work. Mostly, this informs me on how I should label an collect my data going forward.
+
 ## Images
 
 <!-- ### Bubble Chart Week
