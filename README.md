@@ -12,8 +12,6 @@ The radix chart is the most interesting because it shows cyclical data such as e
 
 While the radix chart was the most interesting, I found the tree map to be most useful. It doesn't give great insight but it shows the relative proportions of each category well as well as giving me an idea of how much work one specific task took out of a year of work. Mostly, this informs me on how I should label an collect my data going forward.
 
-## Images
-
 <!-- ### Bubble Chart Week
 
 ![Bubble Chart Key](Data/images/bubblechartkey.png)
