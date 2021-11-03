@@ -6,28 +6,28 @@ For best viewing experience visit here: https://www.averychan.site/PersonalVisua
 
 ## Images
 
-### Bubble Chart Week
+<!-- ### Bubble Chart Week
 
 ![Bubble Chart Key](Data/images/bubblechartkey.png)
-![Bubble Chart Week](Data/images/bubblechartweek.svg)
+![Bubble Chart Week](Data/images/bubblechartweek.svg) -->
 
 ### Bubble Chart Year
 
 ![Bubble Chart Key](Data/images/bubblechartkey.png)
 ![Bubble Chart Year](Data/images/bubblechartyear.svg)
 
-### Radix Week
+<!-- ### Radix Week
 
-![Radix Week](Data/images/radixweek.svg)
+![Radix Week](Data/images/radixweek.svg) -->
 
 ### Radix Year
 
 ![Radix Year](Data/images/radixyear.svg)
 
-### Tree Map Week
+<!-- ### Tree Map Week
 
 ![Tree Map Key](Data/images/treemapkey.png)
-![Tree Map Week](Data/images/treemapweek.svg)
+![Tree Map Week](Data/images/treemapweek.svg) -->
 
 ### Tree Map Year
 
