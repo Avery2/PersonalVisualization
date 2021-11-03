@@ -299,6 +299,68 @@ tree_week <- data_T_time %>% group_by(Project, Description) %>%
 write_csv(tree_week, "tree_toggl_week.csv")
 ```
 
+## Radix
+
+```{r}
+# Relevant data:
+# toggle_year_data
+# data_T_time
+
+toggle_year_data2 <- toggle_year_data %>% rename(
+  Start_Date = `Start date`
+)
+
+projects <- toggle_year_data2$Project %>% unique()
+```
+
+
+```{r}
+
+radix_data_year <- toggle_year_data2 %>%
+  mutate(
+    Minutes = Minutes / 60
+  ) %>% 
+  group_by(Start_Date) %>%
+  summarise(
+    # n = n(),
+    Motivated = sum(Minutes[Project == "Motivated"], na.rm = T),
+    N_A = sum(Minutes[Project %>% is.na()], na.rm = T),
+    School = sum(Minutes[Project == "School"], na.rm = T),
+    Working = sum(Minutes[Project == "Working"], na.rm = T),
+    Recreation = sum(Minutes[Project == "Recreation"], na.rm = T),
+    Chores = sum(Minutes[Project == "Chores"], na.rm = T),
+    Systems = sum(Minutes[Project == "Systems"], na.rm = T),
+    Planning = sum(Minutes[Project == "Planning"], na.rm = T),
+    Absorb = sum(Minutes[Project == "Absorb"], na.rm = T),
+    # total = sum(Minutes),
+    # check = sum(Motivated, N_A, School, Working, Recreation, Chores, Systems, Planning, Absorb) %>% round(5) == total %>% round(5)
+  )  %>% rename(State = Start_Date)
+
+write_csv(radix_data_year, "radix_data_year.csv")
+
+radix_data_week <- data_T_time %>%
+  mutate(
+    Minutes = Minutes / 60
+  ) %>% 
+  group_by(`Start date`) %>%
+  summarise(
+    # n = n(),
+    Motivated = sum(Minutes[Project == "Motivated"], na.rm = T),
+    N_A = sum(Minutes[Project %>% is.na()], na.rm = T),
+    School = sum(Minutes[Project == "School"], na.rm = T),
+    Working = sum(Minutes[Project == "Working"], na.rm = T),
+    Recreation = sum(Minutes[Project == "Recreation"], na.rm = T),
+    Chores = sum(Minutes[Project == "Chores"], na.rm = T),
+    Systems = sum(Minutes[Project == "Systems"], na.rm = T),
+    Planning = sum(Minutes[Project == "Planning"], na.rm = T),
+    Absorb = sum(Minutes[Project == "Absorb"], na.rm = T),
+    # total = sum(Minutes),
+    # check = sum(Motivated, N_A, School, Working, Recreation, Chores, Systems, Planning, Absorb) %>% round(5) == total %>% round(5)
+  )  %>% rename(State = `Start date`)
+
+write_csv(radix_data_week, "radix_data_week.csv")
+```
+
 
 
 ## End
