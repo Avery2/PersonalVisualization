@@ -17,7 +17,7 @@ While the radix chart was the most interesting, I found the tree map to be most 
 ![Bubble Chart Key](Data/images/bubblechartkey.png)
 ![Bubble Chart Week](Data/images/bubblechartweek.svg) -->
 
-### Bubble Chart Year
+## Bubble Chart Year
 
 ![Bubble Chart Key](Data/images/bubblechartkey.png)
 ![Bubble Chart Year](Data/images/bubblechartyear.svg)
@@ -26,7 +26,7 @@ While the radix chart was the most interesting, I found the tree map to be most 
 
 ![Radix Week](Data/images/radixweek.svg) -->
 
-### Radix Year
+## Radix Year
 
 ![Radix Year](Data/images/radixyear.svg)
 
@@ -35,7 +35,7 @@ While the radix chart was the most interesting, I found the tree map to be most 
 ![Tree Map Key](Data/images/treemapkey.png)
 ![Tree Map Week](Data/images/treemapweek.svg) -->
 
-### Tree Map Year
+## Tree Map Year
 
 ![Tree Map Key](Data/images/treemapkey.png)
 ![Tree Map Year](Data/images/treemapyear.svg)
