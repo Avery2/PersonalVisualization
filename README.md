@@ -1,4 +1,4 @@
-# PersonalVisualization
+# Work Visualization
 
 The data visualized here is my time spent doing various things (mostly work) that I collected using [Toggl](https://toggl.com/track/) over a year. The visuals were created using [Observable](https://observablehq.com/@avery2) and [d3.js](https://d3js.org/). Data parsing and exploration was done in R.
 
