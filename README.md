@@ -4,6 +4,8 @@ The data visualized here is my time spent doing various things (mostly work) tha
 
 For best viewing experience view online [here](https://www.averychan.site/PersonalVisualization/). Source on [github](https://github.com/Avery2/PersonalVisualization).
 
+Nov 14, 2022 4:20:28 PM TODO: note on how this conditioned me to work
+
 ## Quick description
 
 The bubble chart kind of looks cool but it honestly doesn't tell me much.
